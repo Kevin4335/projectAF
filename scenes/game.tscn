@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=3 uid="uid://c3f7yghusgqtq"]
+
+[ext_resource type="PackedScene" uid="uid://dufh0pm7kfp4c" path="res://scenes/player.tscn" id="1_pvlaw"]
+[ext_resource type="Texture2D" uid="uid://dcwdmf2vj5g83" path="res://assets/sprites/grass.png" id="2_6n76w"]
+[ext_resource type="Script" path="res://scenes/tile_map.gd" id="3_ls3jc"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_i3rj8"]
+texture = ExtResource("2_6n76w")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+0:0/0/texture_origin = Vector2i(0, -8)
+0:1/0 = 0
+1:0/0 = 0
+1:0/0/texture_origin = Vector2i(0, -8)
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(0, -8, 16, 0, 0, 8, -16, 0)
+2:0/0 = 0
+2:0/0/texture_origin = Vector2i(0, -8)
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(0, 8, 16, 16, 0, 24, -16, 16)
+
+[sub_resource type="TileSet" id="TileSet_luair"]
+tile_shape = 1
+tile_layout = 5
+tile_offset_axis = 1
+tile_size = Vector2i(32, 16)
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_i3rj8")
+
+[node name="Game" type="Node2D"]
+
+[node name="TileMap" type="TileMap" parent="." node_paths=PackedStringArray("Player")]
+y_sort_enabled = true
+tile_set = SubResource("TileSet_luair")
+format = 2
+layer_0/y_sort_enabled = true
+layer_1/name = "Layer1"
+layer_1/y_sort_enabled = true
+layer_1/y_sort_origin = 1
+layer_1/z_index = 1
+layer_2/name = "Layer2"
+layer_2/y_sort_enabled = true
+layer_2/y_sort_origin = 2
+layer_2/z_index = 2
+script = ExtResource("3_ls3jc")
+Player = NodePath("../Player")
+
+[node name="Player" parent="." instance=ExtResource("1_pvlaw")]
+position = Vector2(0, -4)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(3, 3)
