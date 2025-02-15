@@ -27,7 +27,7 @@ sources/0 = SubResource("TileSetAtlasSource_i3rj8")
 
 [node name="Game" type="Node2D"]
 
-[node name="TileMap" type="TileMap" parent="." node_paths=PackedStringArray("Player")]
+[node name="TileMap" type="TileMap" parent="." node_paths=PackedStringArray("player")]
 y_sort_enabled = true
 tile_set = SubResource("TileSet_luair")
 format = 2
@@ -41,7 +41,7 @@ layer_2/y_sort_enabled = true
 layer_2/y_sort_origin = 2
 layer_2/z_index = 2
 script = ExtResource("3_ls3jc")
-Player = NodePath("../Player")
+player = NodePath("../Player")
 
 [node name="Player" parent="." instance=ExtResource("1_pvlaw")]
 position = Vector2(0, -4)

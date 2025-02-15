@@ -46,8 +46,34 @@ func test_gen_map() -> void:
 	for x in range(5):		
 		set_cell(layers.layer1, Vector2i(-5-x,-10),
 				 main_source, grass_wall_block_atlas_pos)
+		set_cell(layers.layer1, Vector2i(-10-x,-3),
+				 main_source, grass_wall_block_atlas_pos)
 
 
-@export var Player: CharacterBody2D# Drag your player node here in the Inspector
+@export var player: CharacterBody2D
+var wall_layer = layers.layer1
+var player_coords: Vector2i
+var cells_alpha = {}
+func _tile_data_runtime_update(layer, coords, tile_data):
+	tile_data.modulate.a = cells_alpha.get(coords, 1.0)
+	
+#Warning: Make sure this function only return true when needed. 
+#Any tile processed at runtime without a need for it will imply a significant performance penalty.
+func _use_tile_data_runtime_update(layer, coords):
+	return cells_alpha.has(coords)
+
 func _process(delta):
-	pass
+	if player == null:
+		return
+
+	player_coords = local_to_map(player.global_position)
+	var coords = get_used_cells(wall_layer)
+	for coord in coords:
+		# print("coord:{0}, player:{1}".format([coord.y, player_coords.y]))
+		if (coord.y - player_coords.y >= -1) and (coord.y - player_coords.y <= 1) and (coord.x - player_coords.x >= -1) and (coord.x - player_coords.x <= 1):
+			cells_alpha[coord] = 0.4
+		else:
+			cells_alpha[coord] = 1.0
+		notify_runtime_tile_data_update(wall_layer)
+	
+	
