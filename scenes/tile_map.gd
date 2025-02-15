@@ -11,9 +11,13 @@ const barrier_block_atlas_pos = Vector2i(1,0)
 const grass_wall_block_atlas_pos = Vector2i(2,0)
 const main_source = 0 # this is the source of the texture, which png
 
+@onready var layer0: TileMapLayer = $Layer0
+@onready var layer1: TileMapLayer = $Layer1
 
+var hover_effect: Polygon2D
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	setup_hover_polygon()
 	test_gen_map()
 	place_boundaries()
 
@@ -63,6 +67,7 @@ func _use_tile_data_runtime_update(layer, coords):
 	return cells_alpha.has(coords)
 
 func _process(delta):
+	handle_hover_effect()
 	if player == null:
 		return
 
@@ -75,5 +80,36 @@ func _process(delta):
 		else:
 			cells_alpha[coord] = 1.0
 		notify_runtime_tile_data_update(wall_layer)
-	
+
+
+# utils
+
+func setup_hover_polygon() -> void:
+	hover_effect = Polygon2D.new()
+	hover_effect.polygon = PackedVector2Array([
+		Vector2(0, -8), # Top
+		Vector2(16, 0), # Right
+		Vector2(0, 8), # Bottom
+		Vector2(-16, 0) # Left
+	])
+	hover_effect.color = Color(1, 1, 1, 0.2)
+	hover_effect.visible = false
+	add_child(hover_effect)
+
+func handle_hover_effect() -> void:
+	var mouse_pos = get_local_mouse_position()
+	var local_mouse_pos = layer0.local_to_map(mouse_pos)
+	# Shifting this because the grid is misbehaving
+	var tile_pos = local_mouse_pos
+	var used_cells = layer0.get_used_cells()
+
+	if used_cells.has(tile_pos):
+		# Convert tile position back to local coordinates for the hover effect
+		var local_pos = layer0.map_to_local(local_mouse_pos)
+		hover_effect.position = local_pos
+		hover_effect.visible = true
+	else:
+		hover_effect.visible = false
+
+
 	
