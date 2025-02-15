@@ -6,7 +6,7 @@ enum layers {
 	layer2 = 2,
 }
 
-const grass_floor_block_atlas_pos = Vector2i(0,0) # this is the position of the texture in the atlas
+const dirt_floor_block_atlas_pos = Vector2i(0,0) # this is the position of the texture in the atlas
 const barrier_block_atlas_pos = Vector2i(1,0)
 const grass_wall_block_atlas_pos = Vector2i(2,0)
 const main_source = 0 # this is the source of the texture, which png
@@ -41,7 +41,7 @@ func test_gen_map() -> void:
 	for y in range(12):
 		for x in range(12):
 			set_cell(layers.layer0, Vector2i(-12+x,-12+y),
-			 main_source, grass_floor_block_atlas_pos)
+			 main_source, dirt_floor_block_atlas_pos)
 	
 	for x in range(5):		
 		set_cell(layers.layer1, Vector2i(-5-x,-10),
